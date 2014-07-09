@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block customcss %}
+     <link href="/css/login.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+    <div class="container">
+    <form class="form-horizontal" method="post">
+    <fieldset>
+        <legend>Join us !</legend>
+
+        <!-- username -->
+        {% if not error_username is defined %}
+            <div class="form-group">
+                <label for="username" class="col-lg-2 control-label">
+                    Username
+                </label>
+        {% else %}
+            <div class="form-group has-error">
+                <label for="username" class="col-lg-2 control-label">
+                    {{error_username}}
+                </label>
+        {% endif %}
+            <div class="col-lg-10">
+                <input type="text" name="username" value="{{username}}" class="form-control" id="username" placeholder="username">
+            </div>
+        </div>
+
+
+        <!-- Password -->
+        {% if not error_password is defined %}
+            <div class="form-group">
+                <label for="password" class="col-lg-2 control-label">
+                    Password
+                </label>
+        {% else %}
+            <div class="form-group has-error">
+                <label for="password" class="col-lg-2 control-label">
+                    {{error_password}}
+                </label>
+        {% endif %}
+            <div class="col-lg-10">
+                <input type="password" name="password" class="form-control" id="password" placeholder="password">
+            </div>
+        </div>
+
+
+        <!-- Verify Password -->
+        {% if not error_verify is defined %}
+            <div class="form-group">
+                <label for="verify" class="col-lg-2 control-label">
+                    Verify password
+                </label>
+        {% else %}
+            <div class="form-group has-error">
+                <label for="verify" class="col-lg-2 control-label">
+                    {{error_verify}}
+                </label>
+        {% endif %}
+            <div class="col-lg-10">
+                <input type="password" name="verify" class="form-control" id="verify" placeholder="verify">
+            </div>
+        </div>
+
+
+        <!-- Email -->
+        {% if not error_email is defined %}
+            <div class="form-group">
+                <label for="email" class="col-lg-2 control-label">
+                    Email(optional)
+                </label>
+        {% else %}
+            <div class="form-group has-error">
+                <label for="email" class="col-lg-2 control-label">
+                    {{error_email}}
+                </label>
+        {% endif %}
+            <div class="col-lg-10">
+                <input type="text" name="email" value="{{email}}" class="form-control" id="email" placeholder="email">
+            </div>
+        </div>
+
+    </fieldset>
+
+        <button type="submit" class="btn btn-primary pull-right" value="submit">
+            submit
+        </button>
+
+    </form>
+    </div>
+</div>
+
+
+{% endblock %}

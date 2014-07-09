@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block customcss %}
+    <link href="/css/page.css" rel="stylesheet">
+{% endblock %}
+
+{% block controls %}
+  {% if user %}
+    <form class="navbar-form navbar-right" action="/_edit{{path}}">
+        <button type="submit" class="btn btn-success" value="Edit">
+            Edit
+        </button>
+    </form>
+    <form class="navbar-form navbar-right" action="/_history{{path}}">
+        <button type="submit" class="btn btn-success" value="login">
+            History
+        </button>
+    </form>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="page-header">
+        <h1>{{ page.path.strip('/') }}</h1>
+    </div>
+
+        {{ page.content | safe }}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>WikiEngine</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    {% block customcss %}
+    {% endblock %}
+
+  </head>
+
+  <body>
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="https://github.com/rickylim19/wiki-engine" target="_blank">
+              WikiEngine
+          </a>
+        </div>
+        
+
+        
+        <div class="navbar-collapse collapse navbar-responsive-collapse">
+            <ul class="nav navbar-nav">
+                <li class="active">
+                    <a href="/">Home</a>
+                </li>
+            </ul>
+        {% if user %}
+          <form class="navbar-form navbar-right" action="/logout">
+              <button type="submit" class="btn btn-primary" value="logout">
+                  logout
+              </button>
+          </form>
+          <p class="navbar-text navbar-right">
+          <b> Hi </b>{{ user.name }}  
+          </p>
+
+        {% else %}
+          <form class="navbar-form navbar-right" action="/signup">
+              <button type="submit" class="btn btn-primary" value="signup">
+                  signup
+              </button>
+          </form>
+          <form class="navbar-form navbar-right" action="/login">
+              <button type="submit" class="btn btn-primary" value="login">
+                  login
+              </button>
+          </form>
+        {% endif %}
+        
+        {% block controls %}
+        
+        {% endblock %}
+        </div><!--/.navbar-collapse -->
+        
+    </div>
+
+
+
+    {% block content %}
+
+
+    {% endblock %}
+
+    <div class="footer">
+        <div class="container">
+            <p class="text-muted">&copy; WikiEngine 2014 </p>
+        </div>
+    </div>
+
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+  </body>
+</html>

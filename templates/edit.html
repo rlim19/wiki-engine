@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block customcss %}
+    <link href="/css/page.css" rel="stylesheet">
+ <style>
+#textarea {
+
+    position:absolute;
+    width: 90%;
+    top:150px;
+    bottom:100px;
+}
+
+#inputs {
+    position:absolute;
+    bottom:100px;
+
+}
+ </style>
+
+{% endblock %}
+
+{% block controls %}
+  {% if user %}
+    <form class="navbar-form navbar-right" action="/_edit{{path}}">
+        <button type="submit" class="btn btn-success" value="Edit">
+            Edit
+        </button>
+    </form>
+    <form class="navbar-form navbar-right" action="/_history{{path}}">
+        <button type="submit" class="btn btn-success" value="login">
+            History
+        </button>
+    </form>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <br>
+        <h2> Content </h2>
+        <form method="post">
+            <fieldset>
+                <textarea id="textarea"  name="content">
+                    {{ page and page.content or "" }}
+                </textarea>
+                <div id="inputs">
+                    <button type="submit">Save</button>
+                
+                </div>
+                <div class="error">{{error}}</div>
+            </fieldset>
+        </form>
+    </div>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,35 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+
+from google.appengine.ext import db
+
+
+class Page(db.Model):
+    path = db.StringProperty(required=True)
+    username = db.StringProperty(required=True)
+    content = db.TextProperty(required=True)
+    created = db.DateTimeProperty(auto_now_add=True)
+    last_modified = db.DateTimeProperty(auto_now=True)
+    version = db.IntegerProperty(required = True)
+
+    @staticmethod
+    def parent_key(path):
+        return db.Key.from_path('/root'+path, 'wikipages')
+
+    @classmethod
+    def by_path(cls, path):
+        q = cls.all()
+        q.ancestor(cls.parent_key(path))
+        q.order("-version")
+        return q
+
+    @classmethod
+    def by_id(cls, page_id, path):
+        return cls.get_by_id(page_id, cls.parent_key(path))
+
+    @classmethod
+    def by_version(cls, version, path):
+        q = cls.all()
+        q.ancestor(cls.parent_key(path))
+        q.filter("version =", version)
+        return q

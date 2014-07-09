@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block customcss %}
+    <link href="/css/page.css" rel="stylesheet">
+{% endblock %}
+
+{% block controls %}
+  {% if user %}
+    <form class="navbar-form navbar-right" action="/_edit{{path}}">
+        <button type="submit" class="btn btn-success" value="Edit">
+            Edit
+        </button>
+    </form>
+    <form class="navbar-form navbar-right" action="/login">
+        <button type="submit" class="btn btn-success" value="login">
+            History
+        </button>
+    </form>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h2> {{path.strip("/")}}: history </h2>
+    </div>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Date</th>
+                <th>Content</th>
+                <th>Version</th>
+                <th>View</th>
+                <th>Edit</th>
+            </tr>
+        </thead>
+        {% for p in posts %}
+        <tr >
+            <td> 
+                {{ p.username}} 
+            </td>
+            <td> 
+                {{ p.last_modified.strftime('%c') }} 
+            </td>
+            <td> 
+                {{ p.content[:100] }} 
+            </td>
+            <td> 
+                {{ p.version }} 
+            </td>
+            <td> 
+                <a href="{{path}}?v={{p.version}}">view </a> 
+            </td>
+            <td> 
+                <a href="/_edit{{path}}?v={{p.version}}"> edit </a> 
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}
