@@ -84,7 +84,7 @@ class Login(basehandler.BaseHandler):
             self.login(u)
             self.redirect(next_url)
         else:
-            msg = 'invalid login'
+            msg = 'Invalid login ! sorry my friend!'
             self.render('login.html', error_login = msg)
 
 class Logout(basehandler.BaseHandler):
