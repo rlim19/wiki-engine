@@ -2,26 +2,11 @@
 
 {% block customcss %}
     <link href="/css/page.css" rel="stylesheet">
- <style>
-#textarea {
-
-    position:absolute;
-    width: 90%;
-    top:150px;
-    bottom:100px;
-}
-
-#inputs {
-    position:absolute;
-    bottom:100px;
-
-}
- </style>
 
 {% endblock %}
 
 {% block controls %}
-  {% if user %}
+    {% if user %}
     <form class="navbar-form navbar-right" action="/_edit{{path}}">
         <button type="submit" class="btn btn-success" value="Edit">
             Edit
@@ -32,28 +17,45 @@
             History
         </button>
     </form>
-  {% endif %}
+    {% endif %}
 {% endblock %}
 
 {% block content %}
-    <div class="container">
+
+<div class="container">
+    <h2> content </h2>
+
+    <form method="post">
+        <fieldset>
+            <textarea class="form-control" style="font-family:monospace;" name="content" id="content" rows="10">{{page and page.content or ""}}</textarea>
+            <br>
+
+            <div id="inputs">
+                <button type="submit" class="btn ">Publish</button>
+            </div>
+        </fieldset>
+
         <br>
-        <h2> Content </h2>
-        <form method="post">
-            <fieldset>
-                <textarea id="textarea"  name="content">
-                    {{ page and page.content or "" }}
-                </textarea>
-                <div id="inputs">
-                    <button type="submit">Save</button>
-                
-                </div>
-                <div class="error">{{error}}</div>
-            </fieldset>
-        </form>
+
+        <h2>preview</h2>
+        <hr>
+
+        <div id="preview"></div>
+    
+    </form>
+</div>
+    {% if error is defined %}
+    <div class="alert alert-dismissable alert-danger">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+            {{error}}
     </div>
 
+ 
+    {% endif %}
 
-
+  <script src="/js/showdown.js"></script>
+  <script src="/js/mdpreview.js"></script>
 
 {% endblock %}
+
+</html>

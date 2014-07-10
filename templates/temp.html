@@ -1,29 +1,56 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Bootstrap-markdown : Bootstrap plugin for markdown editing" />
+{% extends 'base.html' %}
 
-    <link rel="stylesheet" type="text/css" media="screen" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="/css/bootstrap-markdown.min.css">
-  </head>
+{% block customcss %}
+    <link href="/css/page.css" rel="stylesheet">
 
-  <body>
+{% endblock %}
 
-<form>
-    <div class="form-group">
-    <input class="form-control" name="title" type="text" placeholder="Title?" />
-    <textarea name="content" data-provide="markdown" rows="10"></textarea>
-    <label class="checkbox">
-      <input name="publish" type="checkbox"> Publish
-    </label>
-    <hr/>
-    <button type="submit" class="btn">Submit</button>
+{% block controls %}
+    {% if user %}
+    <form class="navbar-form navbar-right" action="/_edit{{path}}">
+        <button type="submit" class="btn btn-success" value="Edit">
+            Edit
+        </button>
+    </form>
+    <form class="navbar-form navbar-right" action="/_history{{path}}">
+        <button type="submit" class="btn btn-success" value="login">
+            History
+        </button>
+    </form>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h2> content </h2>
+    <h2> Fuck </h2>
+
+    <form method="post">
+        <fieldset>
+            <textarea class="form-control" name="content" id="content">
+                {{ page and page.content or "" }}
+            </textarea>
+                <button type="submit" class="btn ">Publish</button>
+
+        <br>
+        <div id="preview"></div>
+
+        </fieldset>    
+    </form>
+</div>
+    {% if error is defined %}
+    <div class="alert alert-dismissable alert-danger">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+            {{error}}
     </div>
-</form>                 
- <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"type="text/javascript"></script>
-  <script src="/js/bootstrap-markdown.js"></script>
-  
-  </body>
+
+ 
+    {% endif %}
+
+    <script src="/js/showdown.js"></script>
+    <script src="/js/mdpreview.js"></script>
+
+{% endblock %}
+
 </html>

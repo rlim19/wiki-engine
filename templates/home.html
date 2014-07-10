@@ -28,13 +28,13 @@
     <div class="container">
       <!-- Example row of columns -->
       <div class="row">
-      {% for page in pages %}
+      {% for path, content in pages %}
         <div class="col-md-4">
             <h2>
-                <a class="brand" href="{{page.path}}">{{page.path.strip("/")}} </a>
+                <a class="brand" href="{{path}}">{{path.strip("/")}} </a>
             </h2>
-            <p>{{ page.content[:200] | safe }} ...</p>
-          <p><a class="btn btn-default" href="{{page.path}}" role="button">View details &raquo;</a></p>
+            <p>{{ content[:200] | safe }} ...</p>
+          <p><a class="btn btn-default" href="{{path}}" role="button">View details &raquo;</a></p>
         </div>
       {% endfor %}
       </div>

@@ -9,6 +9,7 @@ import urllib
 from google.appengine.api import memcache
 from datetime import datetime, timedelta
 import time
+from libs.utils.markdown2 import *
 
 class TestTemp(basehandler.BaseHandler):
     def get(self):
@@ -70,8 +71,14 @@ def age_str(age):
 class Home(basehandler.BaseHandler):
     def get(self):
         pages, age = front_pages()
-        logging.error(age)
-        self.render("home.html", pages=pages, age=age_str(age))
+
+        path_content = []
+        for page in pages:
+            path, content = page.path, markdown(page.content)
+            path_content.append((path, content))
+
+        self.render("home.html", pages=path_content, age=age_str(age))
+        #self.render("home.html", pages=pages, age=age_str(age))
 
 
 class EditPage(basehandler.BaseHandler):
@@ -87,7 +94,7 @@ class EditPage(basehandler.BaseHandler):
                 logging.error("hit DB query")
                 p = Page.by_version(int(v), path).get()
 
-            if not p:
+            if not page:
                 return self.notfound()
         
         else:
@@ -111,16 +118,19 @@ class EditPage(basehandler.BaseHandler):
             elif old_page.content != content:
                 version  = old_page.version + 1
 
+
             p = Page(parent = Page.parent_key(path),
                      username = self.user.name,
                      path = path,
                      content = content, 
                      version = version)
             p.put()
+            time.sleep(1)
             front_pages(update=True)
 
             self.redirect(path)
         else:
+            logging.error("content needed!")
             error="content needed!"
             self.render("edit.html", path=path, error=error)
 
@@ -144,12 +154,18 @@ class WikiPage(basehandler.BaseHandler):
             if v.isdigit():
                 logging.error("version:"+ v)
                 p = Page.by_version(int(v), path).get()
-            if not p:
+                content = markdown(p.content)
+            if not page:
                 return self.notfound()
         else:
             p = Page.by_path(path).get()
+            if p:
+                content = markdown(p.content)
+            else:
+                content = p
 
         if p:
-            self.render("page.html", page=p, path=path)
+            #self.render("page.html", page=markdown(p), path=path)
+            self.render("page.html", content=content, path=path)
         else:
             self.redirect("/_edit" + path)
