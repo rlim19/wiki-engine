@@ -32,3 +32,9 @@ indexes:
   properties:
   - name: version
     direction: desc
+
+- kind: Quote
+  properties:
+  - name: version
+  - name: last_modified
+    direction: desc

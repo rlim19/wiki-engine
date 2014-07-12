@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block customcss %}
+    <link href="/css/page.css" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h2> content </h2>
+
+    <form method="post">
+        <fieldset>
+            <textarea class="form-control" style="font-family:monospace;" name="content" id="content" rows="10">{{page and page.content or ""}}</textarea>
+            <br>
+
+            <div id="inputs">
+                <button type="submit" class="btn ">Publish</button>
+            </div>
+        </fieldset>
+
+        <br>
+
+        <h2>preview</h2>
+        <hr>
+
+        <div id="preview"></div>
+    
+    </form>
+</div>
+    {% if error is defined %}
+    <div class="alert alert-dismissable alert-danger">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+            {{error}}
+    </div>
+
+ 
+    {% endif %}
+
+  <script src="/js/showdown.js"></script>
+  <script src="/js/mdpreview.js"></script>
+
+{% endblock %}
+
+</html>

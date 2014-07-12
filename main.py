@@ -7,6 +7,7 @@ import jinja2
 
 from webapp2_extras import routes
 from wikiengine import wiki_handlers
+from wikiengine import quote_handlers
 from users import users_handlers
 
 DEBUG = os.environ.get('SERVER_SOFTWARE', '').startswith('Dev')
@@ -18,6 +19,9 @@ app = webapp2.WSGIApplication([
        ('/signup', users_handlers.Signup),
        ('/login', users_handlers.Login),
        ('/logout', users_handlers.Logout),
+       ('/quotes', quote_handlers.QuotePage),
+       ('/addquote', quote_handlers.AddQuote),
+       ('/thankyou', quote_handlers.Thankyou),
        ('/?', wiki_handlers.Home),
        ('/_edit' + PAGE_RE, wiki_handlers.EditPage),
        ('/_history' + PAGE_RE, wiki_handlers.HistoryPage),

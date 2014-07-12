@@ -3,7 +3,6 @@
 
 from basehandler import basehandler
 from libs.models.pagemodels import *
-from libs.models.quotemodels import *
 from libs.utils.utils import *
 import logging
 import urllib
@@ -11,7 +10,6 @@ from google.appengine.api import memcache
 from datetime import datetime, timedelta
 import time
 from libs.utils.markdown2 import *
-import random
 
 class TestTemp(basehandler.BaseHandler):
     def get(self):
@@ -29,22 +27,18 @@ def front_pages(update=False):
     while True:
         r = memc.gets(key)
         if r:
-            pages, quotes, save_time = r
+            pages, save_time = r
             age = (datetime.utcnow() - save_time). total_seconds()
         else:
-            pages, quotes, age = None, None, 0
+            pages, age = None, 0
             #logging.error('Initialized')
 
         if pages is None or update:
             #logging.error('Hit DB query')
-
-            p = db.Query(Page)
-            q = db.Query(Quote)
-
-            quotes = q.fetch(limit=None)
+            q = db.Query(Page)
 
             # get all the unique pages (version 1)
-            all_pages= p.filter('version =', 1).order('-last_modified')
+            all_pages= q.filter('version =', 1).order('-last_modified')
             all_pages = all_pages.fetch(limit=None)
 
             # filter for the most recent versions to be displayed
@@ -55,16 +49,16 @@ def front_pages(update=False):
                     pages.append(recent_page)
 
             save_time = datetime.utcnow()
-            memc.add(key, (pages, quotes, save_time))
+            memc.add(key, (pages, save_time))
 
-        #assert pages is not None, "Uninitialized pages"
+        assert pages is not None, "Uninitialized pages"
 
         # check and set the cache (make sure that the cache stores the most recent pages)
-        if memc.cas(key, (pages, quotes, save_time)):
+        if memc.cas(key, (pages, save_time)):
             #logging.error('Test cas pass')
             break
 
-    return pages, quotes, age
+    return pages, age
 
 def age_str(age):
     s = 'Queried %s seconds ago'
@@ -76,47 +70,16 @@ def age_str(age):
 
 class Home(basehandler.BaseHandler):
     def get(self):
-        pages, quotes, age = front_pages()
+        pages, age = front_pages()
 
         path_content = []
         for page in pages:
             path, content = page.path, markdown(page.content)
             path_content.append((path, content))
 
-        if quotes:
-            quote = random.choice(quotes)
-            quote = markdown(quote.quote)
-        else:
-            quote = "<blockquote>We share, because we are not alone</blockquote>"
-
-        self.render("home.html", quote=quote, pages=path_content, age=age_str(age))
+        self.render("home_tmp.html", pages=path_content, age=age_str(age))
         #self.render("home.html", pages=path_content, age=age_str(age))
         #self.render("home.html", pages=pages, age=age_str(age))
-
-class AddQuote(basehandler.BaseHandler):
-    def get(self):
-        if self.user:
-            self.render("addquote.html")
-        else:
-            self.redirect('/login')
-
-    def post(self):
-        if self.user:
-            quote = self.request.get('content')
-            if quote:
-                q = Quote(parent=quote_key(), 
-                          quote=quote, source=self.user.name)
-                q.put()
-                time.sleep(1)
-                front_pages(update=True)
-                self.redirect('/thankyou')
-            else:
-                error = "Add a quote please!"
-                self.render("addquote.html", error=error)
-
-class Thankyou(basehandler.BaseHandler):
-    def get(self):
-        self.render("thankyou.html")
 
 
 class EditPage(basehandler.BaseHandler):

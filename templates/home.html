@@ -8,20 +8,18 @@
 
     <div class="jumbotron">
       <div class="container">
-        <h1>WikiEngine</h1>
+        <h1>Our Quotes</h1>
         <p>
-            This is a template for a simple wiki on Google App Engine (GAE).
+            {{quote|safe}}
         </p>
         <p>
-            <a class="btn btn-primary btn-lg" href="https://github.com/rickylim19/wiki-engine" role="button" target="_blank">
-                Learn more &raquo;
+            <a class="btn btn-primary btn-lg" value="Refresh" onClick="history.go()" role="button" >
+                Flip More &raquo;
             </a>
         </p>
-        <blockquote class="pull-right">
-            <p> <em> We share, because we are not alone </em> </p>
-        </blockquote>
-
-
+            <a class="btn btn-success btn-lg navbar-right" href="/addquote" >
+                Add More 
+            </a>
       </div>
     </div>
 
