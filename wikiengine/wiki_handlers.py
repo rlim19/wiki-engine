@@ -15,7 +15,7 @@ import random
 
 class TestTemp(basehandler.BaseHandler):
     def get(self):
-        self.render("temp.html")
+        self.render("edit_tmp.html")
 
 def front_pages(update=False):
     """
@@ -57,7 +57,7 @@ def front_pages(update=False):
             save_time = datetime.utcnow()
             memc.add(key, (pages, quotes, save_time))
 
-        #assert pages is not None, "Uninitialized pages"
+        assert pages is not None, "Uninitialized pages"
 
         # check and set the cache (make sure that the cache stores the most recent pages)
         if memc.cas(key, (pages, quotes, save_time)):
@@ -84,39 +84,18 @@ class Home(basehandler.BaseHandler):
             path_content.append((path, content))
 
         if quotes:
-            quote = random.choice(quotes)
-            quote = markdown(quote.quote)
+            choosen_quote = random.choice(quotes)
+            source = choosen_quote.source
+            quote = choosen_quote.quote
         else:
-            quote = "<blockquote>We share, because we are not alone</blockquote>"
+            quote = "We share, because we are not alone"
+            source = ""
 
-        self.render("home.html", quote=quote, pages=path_content, age=age_str(age))
-        #self.render("home.html", pages=path_content, age=age_str(age))
-        #self.render("home.html", pages=pages, age=age_str(age))
+        self.render("home.html", 
+                     quote=quote, source=source, 
+                     pages=path_content, age=age_str(age))
 
-class AddQuote(basehandler.BaseHandler):
-    def get(self):
-        if self.user:
-            self.render("addquote.html")
-        else:
-            self.redirect('/login')
 
-    def post(self):
-        if self.user:
-            quote = self.request.get('content')
-            if quote:
-                q = Quote(parent=quote_key(), 
-                          quote=quote, source=self.user.name)
-                q.put()
-                time.sleep(1)
-                front_pages(update=True)
-                self.redirect('/thankyou')
-            else:
-                error = "Add a quote please!"
-                self.render("addquote.html", error=error)
-
-class Thankyou(basehandler.BaseHandler):
-    def get(self):
-        self.render("thankyou.html")
 
 
 class EditPage(basehandler.BaseHandler):
@@ -203,7 +182,36 @@ class WikiPage(basehandler.BaseHandler):
                 content = p
 
         if p:
-            #self.render("page.html", page=markdown(p), path=path)
             self.render("page.html", content=content, path=path)
         else:
             self.redirect("/_edit" + path)
+
+class AddQuote(basehandler.BaseHandler):
+    def get(self):
+        if self.user:
+            self.render("addquote.html")
+        else:
+            self.redirect('/login')
+
+    def post(self):
+        if self.user:
+            quote = self.request.get('content')
+            source = self.request.get('source')
+
+            if quote:
+                q = Quote(parent=quote_key(), 
+                          quote=quote, source=source, 
+                          username=self.user.name)
+                q.put()
+                time.sleep(1)
+                front_pages(update=True)
+                self.redirect('/thankyou')
+            else:
+                logging.error('No Content')
+                error = "Add a quote please!"
+                self.render("addquote.html", error=error)
+
+class Thankyou(basehandler.BaseHandler):
+    def get(self):
+        if self.user:
+            self.render("thankyou.html", name=self.user.name)

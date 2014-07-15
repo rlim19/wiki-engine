@@ -9,15 +9,20 @@
     <div class="jumbotron">
       <div class="container">
         <h1>Our Quotes</h1>
-        <p>
-            {{quote|safe}}
-        </p>
-        <p>
-            <a class="btn btn-primary btn-lg" value="Refresh" onClick="history.go()" role="button" >
+        <blockquote>
+            <p>{{quote|striptags}} </p>   
+            {% if source != "" %}
+                <small>{{source|striptags}}</small>
+            {% else %}
+                {{source|striptags}}
+            {% endif %}
+        </blockquote>
+
+        <a class="btn btn-primary btn-lg" value="Refresh" onClick="history.go()" role="button" >
                 Flip More &raquo;
             </a>
         </p>
-            <a class="btn btn-success btn-lg navbar-right" href="/addquote" >
+            <a class="btn btn-default btn-lg navbar-right" href="/addquote" >
                 Add More 
             </a>
       </div>

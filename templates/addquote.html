@@ -8,25 +8,29 @@
 {% block content %}
 
 <div class="container">
-    <h2> content </h2>
 
     <form method="post">
         <fieldset>
-            <textarea class="form-control" style="font-family:monospace;" name="content" id="content" rows="10">{{page and page.content or ""}}</textarea>
+            <h2> Quote </h2>
+            <textarea class="form-control" style="font-family:monospace;" name="content" id="content" rows="5" placeholder="please enter raw text here"></textarea>
+        </fieldset>
+
+            <br>
+            
+        <fieldset>
+            <h2> Source </h2>
+            <textarea class="form-control" style="font-family:monospace;" name="source" id="source" rows="2" placeholder="please enter raw text here"></textarea>
+
             <br>
 
             <div id="inputs">
-                <button type="submit" class="btn ">Publish</button>
+                <button type="submit" class="btn pull-right">Publish</button>
             </div>
         </fieldset>
 
         <br>
 
-        <h2>preview</h2>
-        <hr>
 
-        <div id="preview"></div>
-    
     </form>
 </div>
     {% if error is defined %}
