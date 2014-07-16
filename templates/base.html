@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+    <head>
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,64 +21,64 @@
     {% block customcss %}
     {% endblock %}
 
-  </head>
+    </head>
 
-  <body>
+    <body>
+
     <div class="navbar navbar-default navbar-fixed-top">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/" >
-              WikiEngine
-          </a>
-        </div>
-        
 
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/" >
+                WikiEngine
+            </a>
+        </div>
         
         <div class="navbar-collapse collapse navbar-responsive-collapse">
             <ul class="nav navbar-nav">
                 <li class="active">
-                    <a href="https://github.com/rickylim19/wiki-engine">About</a>
+                    <a href="https://github.com/rickylim19/wiki-engine">
+                        About
+                    </a>
                 </li>
             </ul>
-        {% if user %}
-          <form class="navbar-form navbar-right" action="/logout">
-              <button type="submit" class="btn btn-primary" value="logout">
-                  logout
-              </button>
-          </form>
-          <p class="navbar-text navbar-right">
-          <b> Hi </b>{{ user.name }}  
-          </p>
 
+        {% if user %}
+            <form class="navbar-form navbar-right" action="/logout">
+                <button type="submit" class="btn btn-primary" value="logout">
+                    logout
+                </button>
+            </form>
+            <p class="navbar-text navbar-right">
+                Hi <b>{{ user.name }}</b>  
+            </p>
         {% else %}
-          <form class="navbar-form navbar-right" action="/signup">
-              <button type="submit" class="btn btn-primary" value="signup">
-                  signup
-              </button>
-          </form>
-          <form class="navbar-form navbar-right" action="/login">
-              <button type="submit" class="btn btn-primary" value="login">
-                  login
-              </button>
-          </form>
+
+            <form class="navbar-form navbar-right" action="/signup">
+                <button type="submit" class="btn btn-primary" value="signup">
+                    signup
+                </button>
+            </form>
+            <form class="navbar-form navbar-right" action="/login">
+                <button type="submit" class="btn btn-primary" value="login">
+                    login
+                </button>
+            </form>
+
         {% endif %}
         
         {% block controls %}
-        
         {% endblock %}
+
         </div><!--/.navbar-collapse -->
         
     </div>
 
-
-
     {% block content %}
-
-
     {% endblock %}
 
     <div class="footer">
@@ -87,28 +88,30 @@
     </div>
 
     <script type="text/x-mathjax-config">
-  	MathJax.Hub.Config({
-    showProcessingMessages: false,
-    tex2jax: { inlineMath: [['$','$'],['\\(','\\)']] },
-    TeX: { equationNumbers: {autoNumber: "AMS"} }
-  	});
+        MathJax.Hub.Config({
+        showProcessingMessages: false,
+        tex2jax: { inlineMath: [['$','$'],['\\(','\\)']] },
+        TeX: { equationNumbers: {autoNumber: "AMS"} }
+        });
 	</script>
+
 	<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 	<script type="text/javascript" src="/js/marked.js"></script>
 
 	<script>
-	marked.setOptions({
-  	renderer: new marked.Renderer(),
-  	gfm: true,
-  	tables: true,
-  	breaks: false,
-  	pedantic: false,
-  	sanitize: false, // IMPORTANT, because we do MathJax before markdown,
-                   //            however we do escaping in 'CreatePreview'.
-  	smartLists: true,
-  	smartypants: false
-	});
+        marked.setOptions({
+        renderer: new marked.Renderer(),
+        gfm: true,
+        tables: true,
+        breaks: false,
+        pedantic: false,
+        sanitize: false, // IMPORTANT, because we do MathJax before markdown,
+                    //            however we do escaping in 'CreatePreview'.
+        smartLists: true,
+        smartypants: false
+        });
 	</script>
+
     {% block preview_script %}  
     {% endblock %}
 

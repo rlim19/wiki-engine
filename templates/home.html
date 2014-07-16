@@ -6,11 +6,12 @@
 
 {% block content %}
 
+    <!-- Area for Quote-->
     <div class="jumbotron">
-      <div class="container">
+        <div class="container">
         <h1>Our Quotes</h1>
         <blockquote>
-            <p>{{quote|striptags}} </p>   
+            <p>{{quote|striptags}}</p>   
             {% if source != "" %}
                 <small>{{source|striptags}}</small>
             {% else %}
@@ -19,35 +20,37 @@
         </blockquote>
 
         <a class="btn btn-primary btn-lg" value="Refresh" onClick="history.go()" role="button" >
-                Flip More &raquo;
-            </a>
-        </p>
-            <a class="btn btn-default btn-lg navbar-right" href="/addquote" >
-                Add More 
-            </a>
-      </div>
-    </div>
+             Flip More &raquo;
+        </a>
 
+        <a class="btn btn-default btn-lg navbar-right" href="/addquote" >
+            Add More 
+        </a>
+        </div>
+    </div> <!-- The End for Quotes -->
+
+    <!-- Area for Pages -->
     <div class="container">
-      <!-- Example row of columns -->
-      <div class="row">
-      {% for path, content in pages %}
+        <div class="row">
+
+        {% for path, content in pages %}
         <div class="col-md-4">
             <h2>
                 <a class="brand" href="{{path}}">{{path.strip("/")}} </a>
             </h2>
-            <p>{{ content[:200] | safe }} ...</p>
-          <p><a class="btn btn-default" href="{{path}}" role="button">View details &raquo;</a></p>
+            <p>{{ content[:200] | safe }}</p>
+            <p><a class="btn btn-default" href="{{path}}" role="button">View details &raquo;</a></p>
         </div>
-      {% endfor %}
-      </div>
+        {% endfor %}
 
-      <hr>
+        </div>
+
+        <hr>
+
         <div class="pull-right">
             {{age}}
         </div>
 
-
-    </div> <!-- /container -->
+    </div> <!-- The End for Pages -->
 
 {% endblock %}

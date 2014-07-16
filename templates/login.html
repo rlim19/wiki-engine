@@ -6,22 +6,21 @@
 
 {% block content %}
     <div class="container">
-
-      <form class="form-signin" role="form" method="post">
-        <h2 class="form-signin-heading">Please login</h2>
-        <input type="text" name="username" class="form-control" placeholder="Username" required autofocus>
-        <input type="password" name="password" class="form-control" placeholder="Password" required>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">login</button>
-      </form>
+        <form class="form-signin" role="form" method="post">
+            <h2 class="form-signin-heading">Please login</h2>
+            <input type="text" name="username" class="form-control" placeholder="Username" required autofocus>
+            <input type="password" name="password" class="form-control" placeholder="Password" required>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">login</button>
+        </form>
 
     </div> <!-- /container -->
 
-     {% if error_login is defined %}
-        <div class="alert alert-dismissable alert-danger">
-            <button type="button" class="close" data-dismiss="alert">×</button>
-            {{error_login}}
-        </div>
-     {% endif %}
 
+    {% if error_login is defined %}
+    <div class="alert alert-dismissable alert-danger">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        {{error_login}}
+    </div>
+    {% endif %}
 
 {% endblock %}
