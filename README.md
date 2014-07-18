@@ -4,7 +4,7 @@ Wiki-Engine was inspired from the final wiki project of [CS253-Udacity](https://
 
 Wiki-engine supports:
 - Wikipage with version history
-- Addition quotes (with random view of the quotes on the front page)
+- Quote addition (with random view of the quotes on the front page)
 - Markdown + Math equations with preview. Thanks to [kercol](https://github.com/kerzol/markdown-mathjax) for the markdown editor. 
 - JSON API for wikipages (/pages.json) and quotes (/quotes.json)
 
