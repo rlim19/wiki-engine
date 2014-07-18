@@ -5,7 +5,7 @@ Wiki-Engine was inspired from the final wiki project of [CS253-Udacity](https://
 Wiki-engine supports:
 - Wikipage with version history
 - Addition quotes (with random view of the quotes on the front page)
-- Markdown + Math equations with preview. Thanks to [kercol](https://github.com/kerzol/markdown-mathjax) for the markdown editor.
+- Markdown + Math equations with preview. Thanks to [kercol](https://github.com/kerzol/markdown-mathjax) for the markdown editor. 
 - JSON API for wikipages (/pages.json) and quotes (/quotes.json)
 
 Technology applied:
@@ -14,6 +14,9 @@ Technology applied:
 - Jinja2 for templating
 
 Hosted at : http://wiki-engine.appspot.com/
+
+**Note**:
+For better editing experience, wiki-engine is best run on firefox with [It's All Text](https://addons.mozilla.org/en-US/firefox/addon/its-all-text/) plugin. This plugin allows us to edit the textarea using vim-editor.
 
 TODO:
 - OpenID Login
