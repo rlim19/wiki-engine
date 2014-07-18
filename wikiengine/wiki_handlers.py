@@ -90,10 +90,24 @@ class Home(basehandler.BaseHandler):
         else:
             quote = "We share, because we are not alone"
             source = ""
-
+        
         self.render("home.html", 
-                     quote=quote, source=source, 
-                     pages=path_content, age=age_str(age))
+                    quote=quote, source=source, 
+                    pages=path_content, age=age_str(age))
+
+
+class PageJson(basehandler.BaseHandler):
+    def get(self):
+        pages, quotes, age = front_pages()
+        pages_json = [p.as_dict() for p in pages]
+        return self.render_json(pages_json)
+
+class QuoteJson(basehandler.BaseHandler):
+    def get(self):
+        pages, quotes, age = front_pages()
+        quotes_json= [q.as_dict() for q in quotes]
+        return self.render_json(quotes_json)
+
 
 
 
@@ -172,7 +186,7 @@ class WikiPage(basehandler.BaseHandler):
                 logging.error("version:"+ v)
                 p = Page.by_version(int(v), path).get()
                 content = markdown(p.content)
-            if not page:
+            if not p:
                 return self.notfound()
         else:
             p = Page.by_path(path).get()

@@ -6,6 +6,7 @@ Wiki-engine supports:
 - Wikipage with version history
 - Addition quotes (with random view of the quotes on the front page)
 - Markdown + Math equations with preview. Thanks to [kercol](https://github.com/kerzol/markdown-mathjax) for the markdown editor.
+- JSON API for wikipages (/pages.json) and quotes (/quotes.json)
 
 Technology applied:
 - Google Appengine (python) for web server
@@ -15,6 +16,5 @@ Technology applied:
 Hosted at : http://wiki-engine.appspot.com/
 
 TODO:
-- JSON Content API
 - OpenID Login
 - Draft

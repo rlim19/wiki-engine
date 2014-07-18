@@ -13,3 +13,12 @@ class Quote(db.Model):
     created = db.DateTimeProperty(auto_now_add=True)
     last_modified = db.DateTimeProperty(auto_now=True)
 
+    def as_dict(self):
+        time_fmt = '%c'
+        d = {'quote': self.quote,
+             'source': self.source,
+             'username': self.username,
+             'created': self.created.strftime(time_fmt),
+             'last_modified': self.created.strftime(time_fmt)}
+        return d
+
