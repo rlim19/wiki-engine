@@ -14,85 +14,33 @@ from libs.utils.markdown2 import *
 import random
 from google.appengine.api import users
 
-class TestTemp(basehandler.BaseHandler):
+
+class Home(basehandler.BaseHandler):
     def get(self):
-        self.render("delete_tmp.html")
+        quotes = Quote.query().fetch(limit = None)
 
-def front_pages(update=False):
-    """
-    memcache the front_pages on the wiki home
-    """
+        p = Page.query()
+        all_pages = p.filter(Page.version == 1).order(-Page.last_modified)
+        all_pages = all_pages.fetch(limit=None)
+        logging.error(all_pages)
 
-    memc = memcache.Client()
-    key = "PAGES"
-
-    #for i in xrange(1,10):
-    while True:
-        r = memc.gets(key)
-        if r:
-            pages, quotes, save_time = r
-            age = (datetime.utcnow() - save_time). total_seconds()
-        else:
-            pages, quotes, age = None, None, 0
-            #logging.error('Initialized')
-
-        if pages is None or update:
-            #logging.error('Hit DB query')
-
-            #q = ndb.Query(Quote)
-            q = Quote.query()
-            quotes = q.fetch(limit=None)
-
-            #p = ndb.Query(Page)
-            p = Page.query()
-            all_pages = p.filter(Page.version == 1).order(-Page.last_modified)
-            all_pages = all_pages.fetch(limit=None)
-            # get all the unique pages (version 1)
-            #all_pages = p.filter('version =', 1).order('-last_modified')
-
-            # filter for the most recent versions to be displayed
+        if all_pages:
+        # filter for the most recent versions to be displayed
             pages = []
             for page in all_pages:
                 recent_page = Page._by_path(page.path).get() #get the most recent!
                 if recent_page not in pages:
                     pages.append(recent_page)
+            #pages, quotes
+            logging.error(pages)
 
-            save_time = datetime.utcnow()
-            memc.add(key, (pages, quotes, save_time))
-
-        assert pages is not None, "Uninitialized pages"
-
-        # check and set the cache (make sure that the cache stores the most recent pages)
-        if memc.cas(key, (pages, quotes, save_time)):
-            #logging.error('Test cas pass')
-            break
-
-    return pages, quotes, age
-
-def age_str(age):
-    s = 'Queried %s seconds ago'
-    age = int(age)
-    if age == 1:
-        s = s.replace('seconds', 'second')
-    return s % age
-
-
-
-
-
-class Home(basehandler.BaseHandler):
-    def get(self):
-        pages, quotes, age = front_pages()
-
-        path_content = []
-        for page in pages:
-            #path, content = page.path, markdown(page.content)
-            path = page.path
-            content = markdown(page.content)
-            path_content.append((path, content))
-
-
-
+            path_content = []
+            for page in pages:
+                #path, content = page.path, markdown(page.content)
+                if page is not None:
+                    path = page.path
+                    content = markdown(page.content)
+                    path_content.append((path, content))
 
         if quotes:
             choosen_quote = random.choice(quotes)
@@ -104,7 +52,7 @@ class Home(basehandler.BaseHandler):
         
         self.render("home.html", 
                     quote=quote, source=source, 
-                    pages=path_content, age=age_str(age))
+                    pages=path_content)
 
 
 class PageJson(basehandler.BaseHandler):
@@ -169,7 +117,6 @@ class EditPage(basehandler.BaseHandler):
                      version = version)
             p.put()
             time.sleep(1)
-            front_pages(update=True)
 
             self.redirect(path)
         else:
@@ -244,6 +191,6 @@ class Thankyou(basehandler.BaseHandler):
 
 class DeletePage(basehandler.BaseHandler):
     def get(self, path):
-        keys_ = Page.query().fetch(keys_only=True)
+        keys_ = Page.query().filter(Page.path == path).fetch(keys_only=True)
         ndb.delete_multi(keys_)
         self.redirect('/?')
