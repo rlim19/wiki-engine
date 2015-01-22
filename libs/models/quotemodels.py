@@ -1,19 +1,21 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from google.appengine.ext import db
+from google.appengine.ext import ndb
 
-def quote_key(name="default"):
-    return db.Key.from_path('quotes', name)
 
-class Quote(db.Model):
-    quote = db.TextProperty(required=True)
-    source = db.StringProperty()
-    username = db.StringProperty(required=True)
-    created = db.DateTimeProperty(auto_now_add=True)
-    last_modified = db.DateTimeProperty(auto_now=True)
+class Quote(ndb.Model):
+    quote = ndb.TextProperty(required=True)
+    source = ndb.StringProperty()
+    username = ndb.StringProperty(required=True)
+    created = ndb.DateTimeProperty(auto_now_add=True)
+    last_modified = ndb.DateTimeProperty(auto_now=True)
 
-    def as_dict(self):
+    def _parent_key(name="default"):
+        return ndb.Key('quotes', name)
+        #jjreturn ndb.Key.from_path('quotes', name)
+
+    def _as_dict(self):
         time_fmt = '%c'
         d = {'quote': self.quote,
              'source': self.source,
@@ -21,4 +23,3 @@ class Quote(db.Model):
              'created': self.created.strftime(time_fmt),
              'last_modified': self.created.strftime(time_fmt)}
         return d
-

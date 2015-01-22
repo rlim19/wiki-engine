@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block controls %}
-    {% if user %}
+    {% if user or admin %}
         <form class="navbar-form navbar-right" action="/_edit{{path}}">
             <button type="submit" class="btn btn-success" value="Edit">
                 Edit

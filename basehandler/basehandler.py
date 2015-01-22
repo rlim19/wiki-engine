@@ -12,6 +12,7 @@ import json
 from libs.utils.utils import *
 from libs.models.usermodels import *
 from libs.models.pagemodels import *
+from google.appengine.api import users
 
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader('templates'),
                                autoescape=True)
@@ -24,7 +25,9 @@ class BaseHandler(webapp2.RequestHandler):
 
     def render_str(self, template, **params):
         params['user'] = self.user
+        params['admin_logout'] = users.create_logout_url('/')
         params['gray_style'] = gray_style
+        params['admin'] = self.useradmin
         t = jinja_env.get_template(template)
         return t.render(params)
 
@@ -50,6 +53,9 @@ class BaseHandler(webapp2.RequestHandler):
         webapp2.RequestHandler.initialize(self, *a, **kw)
         uid = self.read_secure_cookie('user_id')
         self.user = uid and User.by_id(int(uid))
+        self.isadmin = users.is_current_user_admin()
+        if self.isadmin:
+            self.useradmin = users.get_current_user()
 
         if self.request.url.endswith('.json'):
             self.format = 'json'

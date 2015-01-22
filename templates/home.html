@@ -37,7 +37,16 @@
         <div class="col-md-6">
             <h2>
                 <a class="brand" href="{{path}}">{{path.strip("/")}} </a>
+
+            {% if admin %}
+                <a data-href="/admin/_delete/{{path.strip("/")}}" data-toggle="modal" data-target="#confirm-delete" href="#">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </a>
+            {% endif %}
+
             </h2>
+
+
             <p>{{ content[:200] | safe }}</p>
             <p><a class="btn btn-default" href="{{path}}" role="button">View details &raquo;</a></p>
         </div>
@@ -46,8 +55,31 @@
         </div>
 
         <hr>
-
-
     </div> <!-- The End for Pages -->
 
+    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Confirm Delete</h4>
+                </div>
+
+                <div class="modal-body">
+                    <p>You are about to delete one wikipage, this procedure is irreversible!</p>
+                    <p>Do you want to proceed?</p>
+                    <p class="debug-url"></p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <a href="#" class="btn btn-danger danger">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
+
+

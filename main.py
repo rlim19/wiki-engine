@@ -16,6 +16,8 @@ DEBUG = os.environ.get('SERVER_SOFTWARE', '').startswith('Dev')
 PAGE_RE = r'(/.*)'
 app = webapp2.WSGIApplication([
        ('/testtemp', wiki_handlers.TestTemp),
+       ('/admin/?', wiki_handlers.Home),
+       ('/admin/_delete' + PAGE_RE, wiki_handlers.DeletePage),
        ('/pages.json', wiki_handlers.PageJson),
        ('/quotes.json', wiki_handlers.QuoteJson),
        ('/signup', users_handlers.Signup),
