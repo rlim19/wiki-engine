@@ -25,22 +25,21 @@ class Home(basehandler.BaseHandler):
         logging.error(all_pages)
 
         if all_pages:
-        # filter for the most recent versions to be displayed
             pages = []
             for page in all_pages:
                 recent_page = Page._by_path(page.path).get() #get the most recent!
                 if recent_page not in pages:
                     pages.append(recent_page)
-            #pages, quotes
-            logging.error(pages)
+            #logging.error(pages)
 
             path_content = []
             for page in pages:
-                #path, content = page.path, markdown(page.content)
                 if page is not None:
                     path = page.path
                     content = markdown(page.content)
                     path_content.append((path, content))
+        else:
+            path_content = ''
 
         if quotes:
             choosen_quote = random.choice(quotes)
@@ -70,7 +69,7 @@ class QuoteJson(basehandler.BaseHandler):
 
 class EditPage(basehandler.BaseHandler):
     def get(self, path):
-        if not self.user and not self.isadmin:
+        if not self.user and not self.useradmin:
             self.redirect('/login')
 
         v = self.request.get('v')
@@ -78,19 +77,19 @@ class EditPage(basehandler.BaseHandler):
         if v:
             #logging.error('version: ' + v)
             if v.isdigit():
-                logging.error("hit DB query")
+                #logging.error("hit DB query")
                 p = Page._by_version(int(v), path).get()
 
-            if not page:
-                return self.notfound()
-        
+            #if not page:
+            #    return self.notfound()
+
         else:
             p = Page._by_path(path).get()
 
         self.render("edit.html", path=path , page=p)
 
     def post(self, path):
-        if not self.user and not self.isadmin:
+        if not self.user and not self.useradmin:
             self.error(400)
             return 
 
@@ -105,13 +104,8 @@ class EditPage(basehandler.BaseHandler):
             elif old_page.content != content:
                 version  = old_page.version + 1
 
-            if self.isadmin:
-                uname = users.get_current_user().nickname()
-            else:
-                uname = self.user.name
-
             p = Page(parent = Page._parent_key(path),
-                     username = uname,
+                     username = self.uname,
                      path = path,
                      content = content, 
                      version = version)
@@ -130,11 +124,11 @@ class HistoryPage(basehandler.BaseHandler):
         q = Page._by_path(path)
         posts = q.fetch(limit = None)
 
-        #posts = list(q)
         if posts:
             self.render("history.html", path=path, posts=posts)
         else:
-            self.redirect("/_edit" + path)
+            #self.redirect("/_edit" + path)
+            self.redirect("/")
 
 class WikiPage(basehandler.BaseHandler):
     def get(self, path):
@@ -159,25 +153,21 @@ class WikiPage(basehandler.BaseHandler):
         else:
             self.redirect("/_edit" + path)
 
-class AddQuote(basehandler.BaseHandler):
-    def get(self):
-        if self.user:
-            self.render("addquote.html")
-        else:
-            self.redirect('/login')
-
-    def post(self):
-        if self.user:
-            quote = self.request.get('content')
+class AddQuote(basehandler.BaseHandler): 
+    def get(self): 
+        if self.user or self.useradmin: 
+            self.render("addquote.html") 
+        else: self.redirect('/login')  
+    def post(self): 
+        if self.user or self.useradmin: 
+            quote = self.request.get('content') 
             source = self.request.get('source')
 
             if quote:
-                q = Quote(parent = Quote._parent_key(name),
+                q = Quote(parent = Quote._parent_key(),
                           quote = quote, source=source,
-                          username = self.user.name)
+                          username = self.uname)
                 q.put()
-                time.sleep(1)
-                front_pages(update=True)
                 self.redirect('/thankyou')
             else:
                 logging.error('No Content')
@@ -186,11 +176,22 @@ class AddQuote(basehandler.BaseHandler):
 
 class Thankyou(basehandler.BaseHandler):
     def get(self):
-        if self.user:
-            self.render("thankyou.html", name=self.user.name)
+        if self.user or self.useradmin:
+            self.render("thankyou.html", name = self.uname)
 
 class DeletePage(basehandler.BaseHandler):
     def get(self, path):
-        keys_ = Page.query().filter(Page.path == path).fetch(keys_only=True)
+        keys_ = Page.query().filter(Page.path == path).fetch(keys_only = True)
         ndb.delete_multi(keys_)
         self.redirect('/?')
+
+class DeleteVersionPage(basehandler.BaseHandler): 
+    def get(self, path): 
+        v = int(self.request.get('v')) 
+        if not self.useradmin and not v: 
+            self.error(400) 
+            return
+
+        key_ = Page.query(Page.path == path, Page.version == v).fetch(keys_only = True)
+        ndb.delete_multi(key_)
+        self.redirect('/_history' + path)

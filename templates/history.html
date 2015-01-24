@@ -33,6 +33,7 @@
                 <th>Version</th>
                 <th>View</th>
                 <th>Edit</th>
+                <th>Delete</th>
             </tr>
         </thead>
         {% for p in posts %}
@@ -54,6 +55,11 @@
             </td>
             <td> 
                 <a href="/_edit{{path}}?v={{p.version}}"> edit </a> 
+            </td>
+            <td>
+                <a data-href="/admin/_deleteV{{path}}?v={{p.version}}"data-toggle="modal" data-target="#confirm-delete" href="#">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </a>
             </td>
         </tr>
         {% endfor %}

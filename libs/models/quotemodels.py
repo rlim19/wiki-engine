@@ -11,6 +11,7 @@ class Quote(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
     last_modified = ndb.DateTimeProperty(auto_now=True)
 
+    @staticmethod
     def _parent_key(name="default"):
         return ndb.Key('quotes', name)
         #jjreturn ndb.Key.from_path('quotes', name)

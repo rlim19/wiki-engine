@@ -48,13 +48,14 @@ class Signup(basehandler.BaseHandler):
         if have_error:
             self.render('signup.html', **params)
         else:
-            u = User.by_name(self.username)
+            u = User._by_name(self.username)
             if u:
                 msg = 'That user already exists.'
                 params = {'username': self.username, 'error_username': msg}
                 self.render('signup.html', **params)
             else:
-                u = User.register(self.username, self.password, self.email)
+
+                u = User._register(name = self.username, pw = self.password, email = self.email)
                 u.put()
                 self.login(u)
                 self.redirect(next_url)
@@ -79,7 +80,7 @@ class Login(basehandler.BaseHandler):
         if not next_url or next_url.startwith('/login'):
             next_url = '/'
 
-        u = User.login(username, password)
+        u = User._login(username, password)
         if u:
             self.login(u)
             self.redirect(next_url)

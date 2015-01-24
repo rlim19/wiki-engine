@@ -52,18 +52,19 @@ class BaseHandler(webapp2.RequestHandler):
     def initialize(self, *a, **kw):
         webapp2.RequestHandler.initialize(self, *a, **kw)
         uid = self.read_secure_cookie('user_id')
-        self.user = uid and User.by_id(int(uid))
-        self.isadmin = users.is_current_user_admin()
-        if self.isadmin:
-            self.useradmin = users.get_current_user()
+        self.user = uid and User._by_id(int(uid))
+        self.useradmin = users.is_current_user_admin() and users.get_current_user()
 
+        if self.useradmin: self.uname = users.get_current_user().nickname()
+        if self.user: self.uname = self.user.name
+        #self.isadmin = users.is_current_user_admin()
         if self.request.url.endswith('.json'):
             self.format = 'json'
         else:
             self.format = 'html'
 
     def login(self, user):
-        self.set_secure_cookie('user_id', str(user.key().id()))
+        self.set_secure_cookie('user_id', str(user.key.id()))
 
     def logout(self):
         self.response.headers.add_header(

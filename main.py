@@ -12,11 +12,11 @@ from users import users_handlers
 
 DEBUG = os.environ.get('SERVER_SOFTWARE', '').startswith('Dev')
 
-#PAGE_RE = r'(/(?:[a-zA-Z0-9]+/?)*)'
-PAGE_RE = r'(/.*)'
+PAGE_RE = r'(/(?:[a-zA-Z0-9]+/?)*)'
 app = webapp2.WSGIApplication([
        ('/admin/?', wiki_handlers.Home),
        ('/admin/_delete' + PAGE_RE, wiki_handlers.DeletePage),
+       ('/admin/_deleteV' + PAGE_RE, wiki_handlers.DeleteVersionPage),
        ('/pages.json', wiki_handlers.PageJson),
        ('/quotes.json', wiki_handlers.QuoteJson),
        ('/signup', users_handlers.Signup),

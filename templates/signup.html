@@ -9,9 +9,9 @@
 <div class="jumbotron">
     <div class="container">
     <form class="form-horizontal" method="post">
-    <fieldset>
-        <legend>Join us !</legend>
 
+        <h2 class="text-center">Join us !</h2>
+        <br>
         <!-- username -->
         {% if not error_username is defined %}
             <div class="form-group">
@@ -68,7 +68,7 @@
         {% if not error_email is defined %}
             <div class="form-group">
                 <label for="email" class="col-lg-2 control-label">
-                    Email(optional)
+                    Email
                 </label>
         {% else %}
             <div class="form-group has-error">
@@ -81,8 +81,8 @@
             </div>
             </div>
 
-    </fieldset>
 
+        <br>
         <button type="submit" class="btn btn-primary pull-right" value="submit">
             submit
         </button>
