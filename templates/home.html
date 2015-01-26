@@ -9,9 +9,9 @@
     <!-- Area for Quote-->
     <div class="jumbotron">
         <div class="container">
-        <h1>Our Quotes</h1>
-        <blockquote>
-            <p>{{quote|striptags}}</p>   
+            <h1>#quote</h1>
+        <blockquote style="border-color: #ddd;">
+            <p>{{quote|striptags}}</p>
             {% if source != "" %}
                 <small>{{source|striptags}}</small>
             {% else %}
@@ -20,44 +20,43 @@
         </blockquote>
 
         <a class="btn btn-primary btn-lg" value="Refresh" onClick="history.go()" role="button" >
-             Flip More &raquo;
+            Flip More &raquo;
         </a>
 
         <a class="btn btn-default btn-lg navbar-right" href="/addquote" >
-            Add More 
+            Add More
         </a>
+
         </div>
     </div> <!-- The End for Quotes -->
 
     <!-- Area for Pages -->
     <div class="container">
-        <div class="row">
+            {%- for page_content in pages | batch(2) %}
+            <div class="row">
+                {%- for path,content in page_content %}
+                <div class="col-md-6">
+                <h2>
+                    <a class="brand" href="{{path}}" target='_blank'>
+                        {{path.strip("/")}}
+                    </a>
+                    {% if admin %}
+                        <a data-href="/admin/_delete/{{path.strip("/")}}" data-toggle="modal" data-target="#confirm-delete" href="#">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                    {% endif %}
+                </h2>
+                <p>{{content[:200] | safe}}</p>
+                <p><a class="btn btn-default" href="{{path}}" role="button">View details &raquo;</a></p>
+                </div>
+                {%- endfor %}
+            </div>
+            {% endfor %}
 
-        {% for path, content in pages %}
-        <div class="col-md-6">
-            <h2>
-                <a class="brand" href="{{path}}">{{path.strip("/")}} </a>
-
-            {% if admin %}
-                <a data-href="/admin/_delete/{{path.strip("/")}}" data-toggle="modal" data-target="#confirm-delete" href="#">
-                    <span class="glyphicon glyphicon-trash"></span>
-                </a>
-            {% endif %}
-
-            </h2>
-
-
-            <p>{{ content[:200] | safe }}</p>
-            <p><a class="btn btn-default" href="{{path}}" role="button">View details &raquo;</a></p>
-        </div>
-        {% endfor %}
-
-        </div>
-
-        <hr>
     </div> <!-- The End for Pages -->
 
-
 {% endblock %}
+
+
 
 

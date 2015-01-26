@@ -35,8 +35,7 @@ class Home(basehandler.BaseHandler):
             path_content = []
             for page in pages:
                 if page is not None:
-                    path = page.path
-                    content = markdown(page.content)
+                    path, content = page.path, markdown(page.content)
                     path_content.append((path, content))
         else:
             path_content = ''
@@ -48,10 +47,11 @@ class Home(basehandler.BaseHandler):
         else:
             quote = "We share, because we are not alone"
             source = ""
-        
+        logging.error(path_content)
+
         self.render("home.html", 
-                    quote=quote, source=source, 
-                    pages=path_content)
+                    quote = quote, source = source,
+                    pages = path_content)
 
 
 class PageJson(basehandler.BaseHandler):

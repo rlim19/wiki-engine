@@ -17,7 +17,3 @@ Hosted at : http://wiki-engine.appspot.com/
 
 **Note**:
 For better editing experience, wiki-engine is best run on firefox with [It's All Text](https://addons.mozilla.org/en-US/firefox/addon/its-all-text/) plugin. This plugin allows us to edit the textarea using vim-editor.
-
-TODO:
-- OpenID Login
-- Draft
